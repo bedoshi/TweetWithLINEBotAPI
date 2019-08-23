@@ -4,6 +4,7 @@ use warnings;
 use LINE::Bot::API;
 use LINE::Bot::API::Builder::SendMessage;
 use Plack::Request;
+use Net::Twitter;
 
 my $channel_secret         = $ENV{CHANNEL_SECRET};
 my $channel_access_token   = $ENV{CHANNEL_ACCESS_TOKEN};
