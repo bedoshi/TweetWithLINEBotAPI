@@ -19,8 +19,8 @@ my $nt = Net::Twitter->new(
     traits   => [qw/API::RESTv1_1/],
     consumer_key        => $consumer_key,
     consumer_secret     => $consumer_secret,
-    access_token        => $token,
-    access_token_secret => $token_secret,
+    access_token        => $access_token_key,
+    access_token_secret => $access_token_secret,
 );
 
 my $bot = LINE::Bot::API->new(
@@ -46,7 +46,7 @@ sub {
         my $messages = LINE::Bot::API::Builder::SendMessage->new;
         
         my $result = $nt->update($event->text);
-        
+
         $messages->add_text( text => $event->text );
         $bot->reply_message($event->reply_token, $messages->build);
     }
