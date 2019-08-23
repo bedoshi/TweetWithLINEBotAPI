@@ -14,7 +14,7 @@ my $consumer_secret        = $ENV{CONSUMER_SECRET};
 my $access_token_key       = $ENV{ACCESS_TOKEN_KEY};
 my $access_token_secret    = $ENV{ACCESS_TOKEN_SECRET};
 
-my $nt = Net::Twitter->new(legacy => 0);
+# my $nt = Net::Twitter->new(legacy => 0);
 my $nt = Net::Twitter->new(
     traits   => [qw/API::RESTv1_1/],
     consumer_key        => $consumer_key,
