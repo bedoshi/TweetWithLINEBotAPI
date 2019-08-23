@@ -8,7 +8,7 @@ WORKDIR /app
 # Execute with `docker build`
 RUN cpanm Plack -n
 RUN cpanm LINE::Bot::API -n
-
+RUN cpanm Net::Twitter -n
 ENV PORT 3000
 EXPOSE 3000
 EXPOSE 8080
