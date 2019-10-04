@@ -39,7 +39,7 @@ sub {
     unless ($bot->validate_signature($req->content, $req->header('X-Line-Signature'))) {
         return [200, [], ['failed to validate signature']];
     }
- 
+
     my $events = $bot->parse_events_from_json($req->content);
     for my $event (@{ $events }) {
         next unless $event->is_message_event && $event->is_text_message;
@@ -50,6 +50,11 @@ sub {
 
         $messages->add_text( text => $event->text );
         $bot->reply_message($event->reply_token, $messages->build);
+
+        my $richMenuImagePath = './t/controller-rich-menu-image-sample.jpg';
+        print '[debug log]: '.$richMenuImagePath;
+        my $imageUploadResult = $bot->upload_rich_menu_image('testtest', 'image/jpeg', richMenuImagePath);
+        print '[debug log]: '.$imageUploadResult;
     }
  
     return [200, [], ["OK"]];
