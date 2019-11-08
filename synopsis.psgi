@@ -1,5 +1,6 @@
 # in the synopsis.psgi
 use strict;
+use utf8;
 use warnings;
 use LINE::Bot::API;
 use LINE::Bot::API::Builder::SendMessage;
