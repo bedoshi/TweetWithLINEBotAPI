@@ -1,21 +1,25 @@
 # in the synopsis.psgi
 use strict;
+use utf8;
 use warnings;
 use LINE::Bot::API;
 use LINE::Bot::API::Builder::SendMessage;
 use Plack::Request;
 use Net::Twitter;
+use Data::Dumper;
 
-my $channel_secret         = $ENV{CHANNEL_SECRET};
-my $channel_access_token   = $ENV{CHANNEL_ACCESS_TOKEN};
+my $channel_secret          = $ENV{CHANNEL_SECRET};
+my $channel_access_token    = $ENV{CHANNEL_ACCESS_TOKEN};
 
 # the following is Twitter API key.
-my $consumer_key           = $ENV{CONSUMER_KEY};
-my $consumer_secret        = $ENV{CONSUMER_SECRET};
-my $access_token_key       = $ENV{ACCESS_TOKEN_KEY};
-my $access_token_secret    = $ENV{ACCESS_TOKEN_SECRET};
+my $consumer_key            = $ENV{CONSUMER_KEY};
+my $consumer_secret         = $ENV{CONSUMER_SECRET};
+my $access_token_key        = $ENV{ACCESS_TOKEN_KEY};
+my $access_token_secret     = $ENV{ACCESS_TOKEN_SECRET};
+my $richmenu_id             = $ENV{RICHMENU_ID};
 
-# my $nt = Net::Twitter->new(legacy => 0);
+my $richmenu_image          = './richmenu.png';
+
 my $nt = Net::Twitter->new(
     traits   => [qw/API::RESTv1_1/],
     consumer_key        => $consumer_key,
@@ -28,7 +32,8 @@ my $bot = LINE::Bot::API->new(
     channel_secret       => $channel_secret,
     channel_access_token => $channel_access_token,
 );
- 
+
+
 sub {
     my $req = Plack::Request->new(shift);
  
@@ -40,10 +45,14 @@ sub {
         return [200, [], ['failed to validate signature']];
     }
  
+    my $res = $bot->upload_rich_menu_image($richmenu_id, 'image/png', './richmenu.png');
+
+    print STDERR 'rich menu image upload response dump'.Dumper($res);
+    
     my $events = $bot->parse_events_from_json($req->content);
     for my $event (@{ $events }) {
         next unless $event->is_message_event && $event->is_text_message;
- 
+        $bot->set_default_rich_menu($richmenu_id);
         my $messages = LINE::Bot::API::Builder::SendMessage->new;
         
         my $result = $nt->update($event->text);
