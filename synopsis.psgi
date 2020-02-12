@@ -55,19 +55,16 @@ sub {
         my $messages = LINE::Bot::API::Builder::SendMessage->new;
 
         $messages->add_text( text => '文字数: ' . length($event->text) );
+
         if (!Client::Util->is_valid_text($event->text)) {
             $messages->add_text( text => 'over 140, Tweetしませんでした。' );
         } else {
-            eval {
-                my $result = $nt->update($event->text); # tweet the text.
-                $messages->add_text(text => 'tweet しました'); #sending line message to user.
+            $messages->add_text( text => 'メッセージを受信しました');
+            # my $result = $nt->update($event->text); # tweet the text.
+            # $messages->add_text(text => 'tweet しました'); #sending line message to user.
 
-                $messages->add_text(text => q{It's test message}); #sending line message to user.
-                $messages->add_text(text => Dumper($result)); #sending line message to user.
-            };
-            if ($_) {
-                $messages->add_text(text => $_);
-            }
+            $messages->add_text(text => q{It's test message}); #sending line message to user.
+            # $messages->add_text(text => Dumper($result)); #sending line message to user.
         }
 
         $bot->reply_message($event->reply_token, $messages->build);
